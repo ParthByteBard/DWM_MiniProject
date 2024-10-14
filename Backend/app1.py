@@ -28,42 +28,7 @@ if not os.path.exists(COLORIZE_FOLDER):
 # Load the trained food classification model
 food_model = load_model('Happy_Sad_Classifier.keras')
 
-def run_colorizer(image_path):
-    # Use your colorizer code logic here to process the image
-    DIR = r"C:/Users/HP/Desktop/ML-miniProject/colorize"
-    PROTOTXT = os.path.join(DIR, "model", "colorization_deploy_v2.prototxt")
-    POINTS = os.path.join(DIR, "model", "pts_in_hull.npy")
-    MODEL = os.path.join(DIR, "model", "colorization_release_v2.caffemodel")
 
-    net = cv2.dnn.readNetFromCaffe(PROTOTXT, MODEL)
-    pts = np.load(POINTS)
-
-    class8 = net.getLayerId("class8_ab")
-    conv8 = net.getLayerId("conv8_313_rh")
-    pts = pts.transpose().reshape(2, 313, 1, 1)
-    net.getLayer(class8).blobs = [pts.astype("float32")]
-    net.getLayer(conv8).blobs = [np.full([1, 313], 2.606, dtype="float32")]
-
-    image = cv2.imread(image_path)
-    scaled = image.astype("float32") / 255.0
-    lab = cv2.cvtColor(scaled, cv2.COLOR_BGR2LAB)
-    resized = cv2.resize(lab, (224, 224))
-    L = cv2.split(resized)[0]
-    L -= 50
-
-    net.setInput(cv2.dnn.blobFromImage(L))
-    ab = net.forward()[0, :, :, :].transpose((1, 2, 0))
-    ab = cv2.resize(ab, (image.shape[1], image.shape[0]))
-    L = cv2.split(lab)[0]
-    colorized = np.concatenate((L[:, :, np.newaxis], ab), axis=2)
-    colorized = cv2.cvtColor(colorized, cv2.COLOR_LAB2BGR)
-    colorized = np.clip(colorized, 0, 1)
-    colorized = (255 * colorized).astype("uint8")
-
-    return colorized
-
-
-    
 def predict_image(file_path):
     # Read the image
     img = cv2.imread(file_path)
@@ -83,26 +48,6 @@ def predict_image(file_path):
     else:
         return 'Sad'
     
-
-
-
-# Load the colorization model
-DIR = r"colorize"
-PROTOTXT = os.path.join(DIR, "model", "colorization_deploy_v2.prototxt")
-POINTS = os.path.join(DIR, "model", "pts_in_hull.npy")
-MODEL = os.path.join(DIR, "model", "colorization_release_v2.caffemodel")
-color_net = cv2.dnn.readNetFromCaffe(PROTOTXT, MODEL)
-pts = np.load(POINTS)
-class8 = color_net.getLayerId("class8_ab")
-conv8 = color_net.getLayerId("conv8_313_rh")
-pts = pts.transpose().reshape(2, 313, 1, 1)
-color_net.getLayer(class8).blobs = [pts.astype("float32")]
-color_net.getLayer(conv8).blobs = [np.full([1, 313], 2.606, dtype="float32")]
-
-# Route for home page
-@app.route('/')
-def home():
-    return render_template('index.html')  # Home page with navigation
 
 # Route for food classification
 @app.route('/predict', methods=['POST'])
@@ -129,24 +74,6 @@ def predict():
         return classification
 
 # Route for image colorization
-@app.route('/colorize', methods=['POST'])
-def colorize_image():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file uploaded'}), 400
-
-    file = request.files['file']
-    filename = secure_filename(file.filename)
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file.save(file_path)
-
-    # Run your model (this is your provided colorize.py code wrapped as a function)
-    colorized_image = run_colorizer(file_path)
-
-    # Encode the colorized image to base64 to send it as a JSON response
-    _, buffer = cv2.imencode('.jpg', colorized_image)
-    colorized_image_b64 = base64.b64encode(buffer).decode('utf-8')
-
-    return jsonify({'colorizedImage': colorized_image_b64})
 
 if __name__ == '__main__':
     app.run(debug=True)
