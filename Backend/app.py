@@ -8,6 +8,9 @@ from werkzeug.utils import secure_filename
 import cv2
 import tensorflow as tf
 from flask_cors import CORS
+from waitress import serve
+
+
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -74,4 +77,6 @@ def predict():
 # Route for image colorization
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    serve(app, host='0.0.0.0', port=8080)
+ 
+    

@@ -73,7 +73,7 @@ const FileUpload = () => {
     const formData = new FormData();
     formData.append('file', file);
     try {
-      const res = await axios.post('http://localhost:5000/predict', formData);
+      const res = await axios.post('http://localhost:8080/predict', formData);
       console.log(res.data);
       // Assuming the response contains a key called 'prediction'
       setClassification(res.data); // Access the specific prediction data
