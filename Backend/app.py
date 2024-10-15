@@ -14,16 +14,14 @@ app = Flask(__name__)
 CORS(app)
 # Path to upload folders
 UPLOAD_FOLDER = 'uploads'
-COLORIZE_FOLDER = 'colorize/images'
+
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['COLORIZE_FOLDER'] = COLORIZE_FOLDER
+
 
 # Ensure the folders exist
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
-if not os.path.exists(COLORIZE_FOLDER):
-    os.makedirs(COLORIZE_FOLDER)
 
 # Load the trained food classification model
 food_model = load_model('Happy_Sad_Classifier.keras')
