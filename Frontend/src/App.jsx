@@ -74,7 +74,7 @@
 
 // export default App;
 import React from 'react';
-import FoodClassifier from './components/FileUpload';
+import EmotionClassifier from './components/FileUpload';
 import Accuracy from './assets/accuracy_image.png';
 import Loss from './assets/loss_image.png';
 import BackgroundImage from './assets/Techy-image.jpg'; // Update the path to the uploaded background image
@@ -87,11 +87,11 @@ const App = () => {
     >
       {/* Title Section */}
       <h1 className="text-3xl font-bold text-center mb-5 animate-bounce">
-        Binary Classifier built with Deep Learning & CNN
+        Classify Human Faces as Happy or Sad
       </h1>
 
       {/* Food Classifier Component */}
-      <FoodClassifier />
+      <EmotionClassifier />
 
       {/* How the Model Works Section */}
       <div className="mt-10 w-full max-w-2xl mx-auto text-center">
@@ -100,12 +100,12 @@ const App = () => {
           The Happy/Sad Classifier is a binary classifier that identifies a person as Happy/Sad using Deep Learning and Convolutional Neural Networks (CNN). The model is built using TensorFlow and Keras, leveraging a dataset of <strong>305 images</strong> sourced from Google. The training process involves several critical steps:
         </p>
         <ul className="list-disc list-inside text-left mb-5 text-lg">
-          <li><strong>Data Preprocessing:</strong> Images were loaded, validated, and scaled from pixel values of 0–255 to a range of 0–1 for better performance.</li>
-          <li><strong>Model Architecture:</strong> The model uses multiple convolutional and pooling layers, followed by dense layers to classify the images.</li>
-          <li><strong>Training:</strong> The model was trained for 20 epochs, utilizing a training dataset split of 70% for training, 20% for validation, and 10% for testing.</li>
-          <li><strong>Performance Metrics:</strong> Metrics like precision, recall, and binary accuracy were used to evaluate the model’s effectiveness, ensuring robust performance in real-world applications.</li>
+          <li ><strong className='text-yellow-900'>Data Preprocessing:</strong> Images were loaded, validated, and scaled from pixel values of 0–255 to a range of 0–1 for better performance.</li>
+          <li ><strong className='text-yellow-900'>Model Architecture:</strong> The model uses multiple convolutional and pooling layers, followed by dense layers to classify the images.</li>
+          <li ><strong className='text-yellow-900'>Training:</strong> The model was trained for 20 epochs, utilizing a training dataset split of 70% for training, 20% for validation, and 10% for testing.</li>
+          <li ><strong className='text-yellow-900'>Performance Metrics:</strong> Metrics like precision, recall, and binary accuracy were used to evaluate the model’s effectiveness, ensuring robust performance in real-world applications.</li>
         </ul>
-        <p>
+        <p className="text-lg text-blue-500">
           This model was built from scratch, including dataset cleaning. Images were scaled for better feature extraction during training.
         </p>
       </div>
